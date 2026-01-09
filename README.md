@@ -22,11 +22,14 @@ A fast AWS profile switcher for your terminal. Switch between AWS profiles with 
 curl -fsSL https://raw.githubusercontent.com/rnihesh/awsp/main/install.sh | bash
 ```
 
-Or with wget:
+After installation, activate in your current terminal:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/rnihesh/awsp/main/install.sh | bash
+source ~/.zshrc   # for zsh
+source ~/.bashrc  # for bash
 ```
+
+New terminal windows will have `awsp` ready to use.
 
 ### Manual Installation
 

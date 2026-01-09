@@ -195,21 +195,25 @@ configure_shell() {
         echo "$source_line" >> "$config_file"
         print_success "Added awsp to $config_file"
     fi
+    
+    # Export the config file path for use in completion message
+    CONFIGURED_SHELL_RC="$config_file"
 }
 
 # Print completion message
 print_completion() {
+    local config_file="${CONFIGURED_SHELL_RC:-$HOME/.$(detect_shell)rc}"
+    
     echo ""
     echo -e "${GREEN}════════════════════════════════════════════════${NC}"
     echo -e "${GREEN}   ✓ awsp installed successfully!${NC}"
     echo -e "${GREEN}════════════════════════════════════════════════${NC}"
     echo ""
-    echo -e "${BOLD}To start using awsp, either:${NC}"
+    echo -e "${BOLD}To activate awsp in your current terminal, run:${NC}"
     echo ""
-    echo "  1. Restart your terminal, or"
+    echo -e "  ${CYAN}source $config_file${NC}"
     echo ""
-    echo "  2. Run:"
-    echo -e "     ${CYAN}source ~/.$(detect_shell)rc${NC}"
+    echo -e "  (New terminal windows will have awsp ready to use)"
     echo ""
     echo -e "${BOLD}Quick Start:${NC}"
     echo ""
