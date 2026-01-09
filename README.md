@@ -183,9 +183,12 @@ region = us-east-1
 | ---------------- | ----------------------------- |
 | `awsp`           | Interactive profile selection |
 | `awsp <profile>` | Switch to specific profile    |
+| `awsp list`      | List all available profiles   |
 | `awsp clear`     | Clear current profile         |
 | `awsp none`      | Alias for `awsp clear`        |
 | `awsp-current`   | Show current active profile   |
+| `awsp --help`    | Show help message             |
+| `awsp --version` | Show version                  |
 
 ## Contributing
 

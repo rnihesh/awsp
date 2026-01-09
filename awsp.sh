@@ -7,8 +7,52 @@
 # Supports fuzzy search (fzf), SSO auto-login, and identity verification.
 #
 
+AWSP_VERSION="0.0.1"
+
+# Help message
+awsp-help() {
+  cat <<EOF
+awsp - AWS Profile Switcher v${AWSP_VERSION}
+
+Usage:
+  awsp                  Interactive profile selection (uses fzf if available)
+  awsp <profile>        Switch to a specific profile
+  awsp clear|none       Clear current AWS profile
+  awsp list             List all available profiles
+  awsp-current          Show current active profile
+  awsp --help|-h        Show this help message
+  awsp --version|-v     Show version
+
+Examples:
+  awsp                  # Opens interactive selector
+  awsp dev              # Switch to 'dev' profile
+  awsp prod             # Switch to 'prod' profile
+  awsp clear            # Unset AWS_PROFILE
+  awsp list             # Show all profiles
+
+More info: https://github.com/rnihesh/awsp
+EOF
+}
+
 awsp() {
   local p out
+
+  # Handle help and version flags
+  case "$1" in
+    -h|--help|help)
+      awsp-help
+      return 0
+      ;;
+    -v|--version|version)
+      echo "awsp v${AWSP_VERSION}"
+      return 0
+      ;;
+    list)
+      echo "Available AWS profiles:"
+      aws configure list-profiles | sed 's/^/  - /'
+      return 0
+      ;;
+  esac
 
   # Check if aws cli is installed
   if ! command -v aws &> /dev/null; then
@@ -26,8 +70,7 @@ awsp() {
   if [ -n "$1" ]; then
     if ! aws configure list-profiles | grep -qx "$1"; then
       echo "Profile not found: $1"
-      echo "Available profiles:"
-      aws configure list-profiles | sed 's/^/  - /'
+      echo "Run 'awsp list' to see available profiles"
       return 1
     fi
     p="$1"
