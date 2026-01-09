@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>awsp - AWS Profile Switcher</title>
+    <meta
+      name="description"
+      content="A fast AWS profile switcher for your terminal. Switch between AWS profiles with ease."
+    />
+    <link
+      rel="icon"
+      href="https://niheshr.com/nihesh.png"
+      type="image/x-icon"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Red+Rose:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0d1117;
+        --bg-secondary: #161b22;
+        --text: #e6edf3;
+        --text-muted: #8b949e;
+        --accent: #58a6ff;
+        --accent-hover: #79b8ff;
+        --green: #3fb950;
+        --yellow: #d29922;
+        --border: #30363d;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Fira Code", monospace;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Header */
+      header {
+        padding: 24px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-family: "Red Rose", cursive;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      /* Hero */
+      .hero {
+        padding: 80px 0 60px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-family: "Red Rose", cursive;
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        letter-spacing: -0.02em;
+      }
+
+      .hero h1 span {
+        color: var(--accent);
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 40px;
+      }
+
+      /* Install Box */
+      .install-box {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px 24px;
+        max-width: 650px;
+        margin: 0 auto 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .install-box code {
+        font-family: "Fira Code", monospace;
+        font-size: 0.9rem;
+        color: var(--green);
+        white-space: nowrap;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) var(--bg-secondary);
+      }
+
+      .copy-btn {
+        background: var(--border);
+        border: none;
+        color: var(--text);
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+
+      .copy-btn:hover {
+        background: #3d444d;
+      }
+
+      .copy-btn.copied {
+        background: var(--green);
+        color: var(--bg);
+      }
+
+      .github-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: border-color 0.2s;
+      }
+
+      .github-btn:hover {
+        border-color: var(--text-muted);
+      }
+
+      .github-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* Terminal Demo */
+      .terminal {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin: 60px auto;
+        max-width: 700px;
+        overflow: hidden;
+      }
+
+      .terminal-header {
+        background: var(--border);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .terminal-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .terminal-dot.red {
+        background: #ff5f56;
+      }
+      .terminal-dot.yellow {
+        background: #ffbd2e;
+      }
+      .terminal-dot.green {
+        background: #27ca40;
+      }
+
+      .terminal-title {
+        flex: 1;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+
+      .terminal-body {
+        padding: 20px 24px;
+        font-family: "Fira Code", monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+      }
+
+      .terminal-line {
+        display: flex;
+        gap: 8px;
+      }
+
+      .prompt {
+        color: var(--green);
+      }
+
+      .command {
+        color: var(--text);
+      }
+
+      .output {
+        color: var(--text-muted);
+        padding-left: 0;
+      }
+
+      .highlight {
+        color: var(--green);
+      }
+
+      /* Features */
+      .features {
+        padding: 60px 0;
+      }
+
+      .features h2 {
+        font-family: "Red Rose", cursive;
+        text-align: center;
+        font-size: 1.75rem;
+        margin-bottom: 48px;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+      }
+
+      .feature {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 24px;
+      }
+
+      .feature h3 {
+        font-family: "Red Rose", cursive;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .feature p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      /* Commands */
+      .commands {
+        padding: 60px 0;
+      }
+
+      .commands h2 {
+        font-family: "Red Rose", cursive;
+        text-align: center;
+        font-size: 1.75rem;
+        margin-bottom: 48px;
+      }
+
+      .commands-list {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .command-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .command-item:last-child {
+        border-bottom: none;
+      }
+
+      .command-item code {
+        font-family: "Fira Code", monospace;
+        color: var(--accent);
+        font-size: 0.95rem;
+      }
+
+      .command-item span {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      /* Footer */
+      footer {
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+        }
+
+        .install-box {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .install-box code {
+          font-size: 0.8rem;
+        }
+
+        .nav-links {
+          gap: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="/" class="logo">awsp</a>
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#commands">Commands</a>
+            <a href="https://github.com/rnihesh/awsp">GitHub</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Switch AWS profiles <span>instantly</span></h1>
+          <p>
+            A fast, minimal AWS profile switcher for your terminal. Fuzzy
+            search, SSO support, and identity verification built-in.
+          </p>
+
+          <div class="install-box">
+            <code
+              >curl -fsSL
+              https://raw.githubusercontent.com/rnihesh/awsp/main/install.sh |
+              bash</code
+            >
+            <button class="copy-btn" onclick="copyInstall()">Copy</button>
+          </div>
+
+          <a href="https://github.com/rnihesh/awsp" class="github-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+      </section>
+
+      <section class="terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="prompt">$</span>
+            <span class="command">awsp</span>
+          </div>
+          <div class="output">AWS Profile > dev-account</div>
+          <div class="output">
+            <span class="highlight">AWS_PROFILE=dev-account</span>
+          </div>
+          <div class="output">
+            <span class="highlight">Identity verified</span>
+          </div>
+          <div class="output">{</div>
+          <div class="output">&nbsp;&nbsp;"Account": "111111111111",</div>
+          <div class="output">
+            &nbsp;&nbsp;"Arn": "arn:aws:iam::111111111111:user/dev"
+          </div>
+          <div class="output">}</div>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <div class="container">
+          <h2>Features</h2>
+          <div class="features-grid">
+            <div class="feature">
+              <h3>Fuzzy Search</h3>
+              <p>
+                Interactive profile selection with fzf. Falls back to numbered
+                menu if fzf is not installed.
+              </p>
+            </div>
+            <div class="feature">
+              <h3>SSO Support</h3>
+              <p>
+                Automatically detects expired SSO tokens and prompts you to
+                re-authenticate.
+              </p>
+            </div>
+            <div class="feature">
+              <h3>Identity Verification</h3>
+              <p>
+                Confirms your identity after every profile switch using AWS STS.
+              </p>
+            </div>
+            <div class="feature">
+              <h3>Zero Dependencies</h3>
+              <p>
+                Works with just AWS CLI. fzf is optional but recommended for
+                better experience.
+              </p>
+            </div>
+            <div class="feature">
+              <h3>Shell Support</h3>
+              <p>Works with both Bash and Zsh. Easy one-line installation.</p>
+            </div>
+            <div class="feature">
+              <h3>Fast & Minimal</h3>
+              <p>
+                Simple shell function. No bloat, no slowdown to your terminal
+                startup.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="commands" class="commands">
+        <div class="container">
+          <h2>Commands</h2>
+          <div class="commands-list">
+            <div class="command-item">
+              <code>awsp</code>
+              <span>Interactive profile selector</span>
+            </div>
+            <div class="command-item">
+              <code>awsp &lt;profile&gt;</code>
+              <span>Switch to specific profile</span>
+            </div>
+            <div class="command-item">
+              <code>awsp list</code>
+              <span>List all profiles</span>
+            </div>
+            <div class="command-item">
+              <code>awsp clear</code>
+              <span>Clear current profile</span>
+            </div>
+            <div class="command-item">
+              <code>awsp-current</code>
+              <span>Show current profile</span>
+            </div>
+            <div class="command-item">
+              <code>awsp --help</code>
+              <span>Show help</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          Made by <a href="https://niheshr.com">Nihesh Rachakonda</a> &middot;
+          <a href="https://github.com/rnihesh/awsp">GitHub</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      function copyInstall() {
+        const cmd =
+          "curl -fsSL https://raw.githubusercontent.com/rnihesh/awsp/main/install.sh | bash";
+        navigator.clipboard.writeText(cmd).then(() => {
+          const btn = document.querySelector(".copy-btn");
+          btn.textContent = "Copied!";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "Copy";
+            btn.classList.remove("copied");
+          }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>
