@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# AWSP - AWS Profile Switcher
+# awsp - AWS Profile Switcher
 # https://github.com/rnihesh/awsp
 #
 # A fast and friendly AWS profile switcher for your terminal.

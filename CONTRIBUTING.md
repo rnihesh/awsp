@@ -1,6 +1,6 @@
-# Contributing to AWSP
+# Contributing to awsp
 
-First off, thank you for considering contributing to AWSP! 🎉
+First off, thank you for considering contributing to awsp! 🎉
 
 ## How Can I Contribute?
 
@@ -94,4 +94,4 @@ Feel free to open an issue for any questions!
 
 ---
 
-Thank you for contributing! 
+Thank you for contributing!

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# AWSP Installer
+# awsp Installer
 # AWS Profile Switcher - Quick Installation Script
 #
 
@@ -18,14 +18,14 @@ BOLD='\033[1m'
 # Configuration
 REPO_URL="https://github.com/rnihesh/awsp"
 INSTALL_DIR="$HOME/.awsp"
-AWSP_FILE="awsp.sh"
+awsp_FILE="awsp.sh"
 
 # Print banner
 print_banner() {
     echo -e "${CYAN}"
     echo "  ╔═══════════════════════════════════════════╗"
     echo "  ║                                           ║"
-    echo "  ║      AWSP - AWS Profile Switcher          ║"
+    echo "  ║      awsp - AWS Profile Switcher          ║"
     echo "  ║                                           ║"
     echo "  ╚═══════════════════════════════════════════╝"
     echo -e "${NC}"
@@ -116,7 +116,7 @@ check_prerequisites() {
 
 # Download awsp
 download_awsp() {
-    print_step "Installing AWSP..."
+    print_step "Installing awsp..."
     
     # Create install directory
     mkdir -p "$INSTALL_DIR"
@@ -146,17 +146,17 @@ download_awsp() {
         download_file
     fi
     
-    print_success "AWSP installed to $INSTALL_DIR"
+    print_success "awsp installed to $INSTALL_DIR"
 }
 
 # Download file using curl or wget
 download_file() {
-    local url="$REPO_URL/raw/main/$AWSP_FILE"
+    local url="$REPO_URL/raw/main/$awsp_FILE"
     
     if command -v curl &> /dev/null; then
-        curl -fsSL "$url" -o "$INSTALL_DIR/$AWSP_FILE"
+        curl -fsSL "$url" -o "$INSTALL_DIR/$awsp_FILE"
     elif command -v wget &> /dev/null; then
-        wget -qO "$INSTALL_DIR/$AWSP_FILE" "$url"
+        wget -qO "$INSTALL_DIR/$awsp_FILE" "$url"
     else
         print_error "Neither curl nor wget found. Cannot download."
         exit 1
@@ -176,7 +176,7 @@ configure_shell() {
     
     # Check if already configured
     if grep -q "awsp.sh" "$config_file" 2>/dev/null; then
-        print_warning "AWSP already configured in $config_file"
+        print_warning "awsp already configured in $config_file"
         
         # Update old path if needed
         if grep -q ".awsp.sh" "$config_file"; then
@@ -191,9 +191,9 @@ configure_shell() {
     else
         # Add source line to config
         echo "" >> "$config_file"
-        echo "# AWSP - AWS Profile Switcher" >> "$config_file"
+        echo "# awsp - AWS Profile Switcher" >> "$config_file"
         echo "$source_line" >> "$config_file"
-        print_success "Added AWSP to $config_file"
+        print_success "Added awsp to $config_file"
     fi
 }
 
@@ -201,10 +201,10 @@ configure_shell() {
 print_completion() {
     echo ""
     echo -e "${GREEN}════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN}   ✓ AWSP installed successfully!${NC}"
+    echo -e "${GREEN}   ✓ awsp installed successfully!${NC}"
     echo -e "${GREEN}════════════════════════════════════════════════${NC}"
     echo ""
-    echo -e "${BOLD}To start using AWSP, either:${NC}"
+    echo -e "${BOLD}To start using awsp, either:${NC}"
     echo ""
     echo "  1. Restart your terminal, or"
     echo ""
@@ -225,7 +225,7 @@ print_completion() {
 # Uninstall function
 uninstall() {
     print_banner
-    print_step "Uninstalling AWSP..."
+    print_step "Uninstalling awsp..."
     
     # Remove install directory
     if [ -d "$INSTALL_DIR" ]; then
@@ -237,10 +237,10 @@ uninstall() {
     for config_file in "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.profile"; do
         if [ -f "$config_file" ] && grep -q "awsp" "$config_file"; then
             if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i '' '/# AWSP/d' "$config_file"
+                sed -i '' '/# awsp/d' "$config_file"
                 sed -i '' '/awsp.sh/d' "$config_file"
             else
-                sed -i '/# AWSP/d' "$config_file"
+                sed -i '/# awsp/d' "$config_file"
                 sed -i '/awsp.sh/d' "$config_file"
             fi
             print_success "Cleaned $config_file"
@@ -248,7 +248,7 @@ uninstall() {
     done
     
     echo ""
-    print_success "AWSP has been uninstalled"
+    print_success "awsp has been uninstalled"
     echo "    Please restart your terminal or run: exec \$SHELL"
 }
 

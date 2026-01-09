@@ -1,4 +1,4 @@
-# AWSP - AWS Profile Switcher
+# awsp - AWS Profile Switcher
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Shell](https://img.shields.io/badge/Shell-Bash%20%7C%20Zsh-blue.svg)](https://www.gnu.org/software/bash/)
@@ -150,7 +150,7 @@ $ aws sts get-caller-identity
 
 ## Configuration
 
-AWSP uses your existing AWS CLI profiles configured in `~/.aws/config` and `~/.aws/credentials`.
+awsp uses your existing AWS CLI profiles configured in `~/.aws/config` and `~/.aws/credentials`.
 
 ### Example AWS Config (`~/.aws/config`)
 
