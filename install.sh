@@ -25,7 +25,7 @@ print_banner() {
     echo -e "${CYAN}"
     echo "  ╔═══════════════════════════════════════════╗"
     echo "  ║                                           ║"
-    echo "  ║   🔐 AWSP - AWS Profile Switcher          ║"
+    echo "  ║      AWSP - AWS Profile Switcher          ║"
     echo "  ║                                           ║"
     echo "  ╚═══════════════════════════════════════════╝"
     echo -e "${NC}"

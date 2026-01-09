@@ -1,22 +1,20 @@
-# 🔐 AWSP - AWS Profile Switcher
+# AWSP - AWS Profile Switcher
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Shell](https://img.shields.io/badge/Shell-Bash%20%7C%20Zsh-blue.svg)](https://www.gnu.org/software/bash/)
 
-A lightning-fast ⚡ AWS profile switcher for your terminal. Switch between AWS profiles with ease, featuring fuzzy search, SSO support, and automatic identity verification.
+A fast AWS profile switcher for your terminal. Switch between AWS profiles with ease, featuring fuzzy search, SSO support, and automatic identity verification.
 
-![awsp demo](https://via.placeholder.com/800x400?text=AWSP+Demo)
+## Features
 
-## ✨ Features
+- **Fuzzy Search** - Use `fzf` for interactive profile selection (with fallback to `select`)
+- **SSO Support** - Automatic detection of expired SSO tokens with login prompt
+- **Identity Verification** - Confirms your identity after profile switch
+- **Clear Profile** - Easily unset your AWS profile when needed
+- **Colorful Output** - Visual feedback with colored terminal output
+- **Zero Dependencies** - Works with just AWS CLI (fzf optional but recommended)
 
-- 🔍 **Fuzzy Search** - Use `fzf` for interactive profile selection (with fallback to `select`)
-- 🔒 **SSO Support** - Automatic detection of expired SSO tokens with login prompt
-- ✅ **Identity Verification** - Confirms your identity after profile switch
-- 🧹 **Clear Profile** - Easily unset your AWS profile when needed
-- 🎨 **Colorful Output** - Visual feedback with colored terminal output
-- 💨 **Zero Dependencies** - Works with just AWS CLI (fzf optional but recommended)
-
-## 📦 Installation
+## Installation
 
 ### Quick Install (Recommended)
 
@@ -58,7 +56,7 @@ For **Bash** (`~/.bashrc` or `~/.bash_profile`):
 source ~/.zshrc  # or source ~/.bashrc
 ```
 
-## 🚀 Usage
+## Usage
 
 ### Switch Profile (Interactive)
 
@@ -94,17 +92,17 @@ awsp-current
 
 Shows which AWS profile is currently active.
 
-## 📖 Use Cases
+## Use Cases
 
-### 🏢 Multi-Account Management
+### Multi-Account Management
 
-Perfect for DevOps engineers and developers managing multiple AWS accounts:
+Perfect for developers managing multiple AWS accounts:
 
 ```bash
 # Switch to development
 $ awsp dev-account
 AWS_PROFILE=dev-account
-✓ Identity verified
+Identity verified
 {
     "UserId": "AIDAXXXXXXXXXXXXXXXXX",
     "Account": "111111111111",
@@ -114,10 +112,10 @@ AWS_PROFILE=dev-account
 # Quick switch to production
 $ awsp prod-account
 AWS_PROFILE=prod-account
-✓ Identity verified
+Identity verified
 ```
 
-### 🔐 SSO Workflow
+### SSO Workflow
 
 Seamlessly handles AWS SSO authentication:
 
@@ -127,23 +125,10 @@ AWS_PROFILE=sso-profile
 SSO token expired for profile 'sso-profile'
 Run aws sso login now? [y/N]: y
 # Browser opens for SSO authentication
-✓ SSO login successful
+SSO login successful
 ```
 
-### 🔄 CI/CD Local Testing
-
-Test your CI/CD pipelines locally with different credentials:
-
-```bash
-# Test with CI role
-$ awsp ci-deploy-role
-$ terraform plan
-
-# Switch back to admin for fixes
-$ awsp admin
-```
-
-### 🧹 Clean Environment
+### Clear Profile
 
 Reset to default credentials:
 
@@ -155,15 +140,15 @@ AWS_PROFILE cleared
 $ aws sts get-caller-identity
 ```
 
-## 📋 Prerequisites
+## Prerequisites
 
-| Requirement | Required    | Notes                                                                                          |
-| ----------- | ----------- | ---------------------------------------------------------------------------------------------- |
-| AWS CLI v2  | ✅ Yes      | [Install Guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) |
-| fzf         | ❌ Optional | For fuzzy search. [Install Guide](https://github.com/junegunn/fzf#installation)                |
-| Bash/Zsh    | ✅ Yes      | Works with both shells                                                                         |
+| Requirement | Required | Notes                                                                                          |
+| ----------- | -------- | ---------------------------------------------------------------------------------------------- |
+| AWS CLI v2  | Yes      | [Install Guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) |
+| fzf         | Optional | For fuzzy search. [Install Guide](https://github.com/junegunn/fzf#installation)                |
+| Bash/Zsh    | Yes      | Works with both shells                                                                         |
 
-## 🛠️ Configuration
+## Configuration
 
 AWSP uses your existing AWS CLI profiles configured in `~/.aws/config` and `~/.aws/credentials`.
 
@@ -189,7 +174,7 @@ sso_role_name = AdminRole
 region = us-east-1
 ```
 
-## 🔧 Commands Reference
+## Commands Reference
 
 | Command          | Description                   |
 | ---------------- | ----------------------------- |
@@ -199,7 +184,7 @@ region = us-east-1
 | `awsp none`      | Alias for `awsp clear`        |
 | `awsp-current`   | Show current active profile   |
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -209,21 +194,17 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Inspired by the need to quickly switch between AWS profiles
-- Thanks to [fzf](https://github.com/junegunn/fzf) for the amazing fuzzy finder
+- Thanks to [fzf](https://github.com/junegunn/fzf) for the fuzzy finder
 
 ---
 
 <p align="center">
-  Made with ❤️ for the AWS community
-</p>
-
-<p align="center">
-  ⭐ Star this repo if you find it useful!
+  Star this repo if you find it useful!
 </p>
