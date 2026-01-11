@@ -9,6 +9,7 @@ A fast AWS profile switcher for your terminal. Switch between AWS profiles with 
 
 - **Fuzzy Search** - Use `fzf` for interactive profile selection (with fallback to `select`)
 - **SSO Support** - Automatic detection of expired SSO tokens with login prompt
+- **SSO Expiration Display** - Show SSO token expiration time and remaining validity
 - **Identity Verification** - Confirms your identity after profile switch
 - **Clear Profile** - Easily unset your AWS profile when needed
 - **Colorful Output** - Visual feedback with colored terminal output
@@ -86,6 +87,14 @@ awsp none
 ```
 
 Unsets the `AWS_PROFILE` environment variable.
+
+### Show Profile Status
+
+```bash
+awsp status
+```
+
+Shows the current profile and SSO expiration information if using SSO.
 
 ### Check Current Profile
 
@@ -184,6 +193,7 @@ region = us-east-1
 | `awsp`           | Interactive profile selection |
 | `awsp <profile>` | Switch to specific profile    |
 | `awsp list`      | List all available profiles   |
+| `awsp status`    | Show profile and SSO status   |
 | `awsp clear`     | Clear current profile         |
 | `awsp none`      | Alias for `awsp clear`        |
 | `awsp-current`   | Show current active profile   |

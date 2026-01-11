@@ -53,13 +53,28 @@ print_error() {
 
 # Detect shell
 detect_shell() {
-    if [ -n "$ZSH_VERSION" ]; then
-        echo "zsh"
-    elif [ -n "$BASH_VERSION" ]; then
-        echo "bash"
-    else
-        basename "$SHELL"
-    fi
+    # First check SHELL environment variable (most reliable for user's default shell)
+    local shell_path="${SHELL:-$(basename "$0")}"
+    local shell_name=$(basename "$shell_path")
+    
+    case "$shell_name" in
+        zsh)
+            echo "zsh"
+            ;;
+        bash)
+            echo "bash"
+            ;;
+        *)
+            # Fallback to version variables if SHELL is not set or unknown
+            if [ -n "$ZSH_VERSION" ]; then
+                echo "zsh"
+            elif [ -n "$BASH_VERSION" ]; then
+                echo "bash"
+            else
+                echo "$shell_name"
+            fi
+            ;;
+    esac
 }
 
 # Get shell config file
@@ -121,30 +136,15 @@ download_awsp() {
     # Create install directory
     mkdir -p "$INSTALL_DIR"
     
-    # Try git clone first, fallback to curl/wget
-    if command -v git &> /dev/null; then
-        if [ -d "$INSTALL_DIR/.git" ]; then
-            print_step "Updating existing installation..."
-            cd "$INSTALL_DIR" && git pull --quiet
-        else
-            # For local install or if repo doesn't exist yet, copy local file
-            if [ -f "$(dirname "$0")/awsp.sh" ]; then
-                cp "$(dirname "$0")/awsp.sh" "$INSTALL_DIR/"
-            elif [ -f "./awsp.sh" ]; then
-                cp "./awsp.sh" "$INSTALL_DIR/"
-            else
-                # Try to clone from remote
-                rm -rf "$INSTALL_DIR"
-                git clone --quiet "$REPO_URL" "$INSTALL_DIR" 2>/dev/null || {
-                    # If clone fails, create directory and download file
-                    mkdir -p "$INSTALL_DIR"
-                    download_file
-                }
-            fi
-        fi
-    else
-        download_file
+    # Clean up any extra files from previous full repo installation
+    if [ -d "$INSTALL_DIR/.git" ] || [ -f "$INSTALL_DIR/README.md" ]; then
+        print_step "Cleaning up old installation files..."
+        # Keep only awsp.sh, remove everything else
+        find "$INSTALL_DIR" -mindepth 1 -not -name "awsp.sh" -exec rm -rf {} +
     fi
+    
+    # Download only the awsp.sh script file
+    download_file
     
     print_success "awsp installed to $INSTALL_DIR"
 }
@@ -219,6 +219,7 @@ print_completion() {
     echo ""
     echo -e "  ${CYAN}awsp${NC}              # Interactive profile selector"
     echo -e "  ${CYAN}awsp <profile>${NC}    # Switch to specific profile"
+    echo -e "  ${CYAN}awsp status${NC}      # Show profile and SSO status"
     echo -e "  ${CYAN}awsp clear${NC}        # Clear current profile"
     echo -e "  ${CYAN}awsp-current${NC}      # Show current profile"
     echo ""
